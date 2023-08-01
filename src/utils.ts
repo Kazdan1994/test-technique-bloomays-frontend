@@ -51,3 +51,29 @@ export function sortKeys(obj: Missions) {
   }
   return sortedObj;
 }
+
+export function filterDates(missions: Missions, startDate: Date): Missions {
+  const filteredArrivals: Missions = {};
+
+  for (const date of Object.keys(missions)) {
+    let dateObj = new Date(date);
+
+    dateObj = new Date(
+      startDate.getFullYear(),
+      dateObj.getMonth(),
+      dateObj.getDate(),
+    );
+
+    const lastDayOfMonth = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0,
+    );
+
+    if (dateObj >= startDate && dateObj <= lastDayOfMonth) {
+      filteredArrivals[date] = missions[date];
+    }
+  }
+
+  return filteredArrivals;
+}

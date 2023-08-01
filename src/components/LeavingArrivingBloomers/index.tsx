@@ -11,11 +11,11 @@ import './LeavingArrivingBloomers.css';
 import { Timeline } from 'primereact/timeline';
 import { Calendar } from 'primereact/calendar';
 import { EventTimeLine, Missions, Status } from '../../types.ts';
-import { sortKeys, transformData } from '../../utils.ts';
+import { filterDates, sortKeys, transformData } from '../../utils.ts';
 
 function LeavingArrivingBloomers() {
   const [visible, setVisible] = useState<boolean>(true);
-  const [date, setDate] = useState<Date>(new Date('2022-06-17'));
+  const [date, setDate] = useState<Date>(new Date('2020-09-17'));
   const [arriving, setArriving] = useState<Missions>({});
   const [leaving, setLeaving] = useState<Missions>({});
 
@@ -44,13 +44,17 @@ function LeavingArrivingBloomers() {
       const sortedArriving = sortKeys(arriving);
       const sortedLeaving = sortKeys(leaving);
 
+      // Call the function with the arriving and leaving objects
+      const filteredArriving = filterDates(sortedArriving, date);
+      const filteredLeaving = filterDates(sortedLeaving, date);
+
       // Print the results
-      setArriving(sortedArriving);
-      setLeaving(sortedLeaving);
+      setArriving(filteredArriving);
+      setLeaving(filteredLeaving);
     }
 
     loadMissions();
-  }, []);
+  }, [date]);
 
   const transform = (elements: Missions, status: Status): EventTimeLine[] => {
     const missionStatusList: EventTimeLine[] = [];
@@ -88,6 +92,7 @@ function LeavingArrivingBloomers() {
         value={date}
         onChange={(e) => setDate(e.value as Date)}
         dateFormat="dd/mm/yy"
+        disabled
       />
       <Button
         label="Show"
