@@ -1,0 +1,35 @@
+# Vite build output directory
+/dist
+
+# Node.js dependencies
+/node_modules
+
+# Vite cache directory
+/.vite
+
+# Git files and directories
+.git
+.gitignore
+
+# Development files
+.npmrc
+package-lock.json
+yarn.lock
+
+# Editor configuration files
+.editorconfig
+
+# IDE-specific directories
+.vscode
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Test and coverage files
+/coverage
+/.nyc_output
+
+# Logs
+npm-debug.log*
+yarn-error.log*
