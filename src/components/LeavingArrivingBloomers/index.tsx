@@ -12,12 +12,14 @@ import { Timeline } from 'primereact/timeline';
 import { Calendar } from 'primereact/calendar';
 import { EventTimeLine, Missions, Status } from '../../types.ts';
 import { filterDates, sortKeys, transformData } from '../../utils.ts';
+import { Skeleton } from 'primereact/skeleton';
 
 function LeavingArrivingBloomers() {
   const [visible, setVisible] = useState<boolean>(true);
   const [date, setDate] = useState<Date>(new Date('2020-09-17'));
   const [arriving, setArriving] = useState<Missions>({});
   const [leaving, setLeaving] = useState<Missions>({});
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadMissions() {
@@ -53,7 +55,9 @@ function LeavingArrivingBloomers() {
       setLeaving(filteredLeaving);
     }
 
-    loadMissions();
+    loadMissions().then(() => {
+      setLoading(false);
+    });
   }, [date]);
 
   const transform = (elements: Missions, status: Status): EventTimeLine[] => {
@@ -105,19 +109,63 @@ function LeavingArrivingBloomers() {
         <h1 className="font-medium">
           <u className="text-green-700">2</u> Bloomers entrants
         </h1>
-        <Timeline
-          className="customized-timeline"
-          value={transform(arriving, Status.ARRIVING)}
-          content={customizedContent}
-        />
+        {loading ? (
+          <>
+            <div className="flex ml-3 mb-4">
+              <Skeleton shape="circle" size="1rem" className="mr-2"></Skeleton>
+              <div style={{ flex: '1' }}>
+                <Skeleton width="100%"></Skeleton>
+              </div>
+            </div>
+            <Skeleton
+              width="36px"
+              height=".5rem"
+              className="rotate-90"
+            ></Skeleton>
+            <div className="flex ml-3 mt-4">
+              <Skeleton shape="circle" size="1rem" className="mr-2"></Skeleton>
+              <div style={{ flex: '1' }}>
+                <Skeleton width="100%" className="mb-2"></Skeleton>
+              </div>
+            </div>
+          </>
+        ) : (
+          <Timeline
+            className="customized-timeline"
+            value={transform(arriving, Status.ARRIVING)}
+            content={customizedContent}
+          />
+        )}
         <h1 className="font-medium">
           <u className="text-red-400">2</u> Bloomers sortants
         </h1>
-        <Timeline
-          className="customized-timeline"
-          value={transform(leaving, Status.LEAVING)}
-          content={customizedContent}
-        />
+        {loading ? (
+          <>
+            <div className="flex ml-3 mb-4">
+              <Skeleton shape="circle" size="1rem" className="mr-2"></Skeleton>
+              <div style={{ flex: '1' }}>
+                <Skeleton width="100%"></Skeleton>
+              </div>
+            </div>
+            <Skeleton
+              width="36px"
+              height=".5rem"
+              className="rotate-90"
+            ></Skeleton>
+            <div className="flex ml-3 mt-4">
+              <Skeleton shape="circle" size="1rem" className="mr-2"></Skeleton>
+              <div style={{ flex: '1' }}>
+                <Skeleton width="100%" className="mb-2"></Skeleton>
+              </div>
+            </div>
+          </>
+        ) : (
+          <Timeline
+            className="customized-timeline"
+            value={transform(leaving, Status.LEAVING)}
+            content={customizedContent}
+          />
+        )}
       </Dialog>
     </>
   );
