@@ -9,7 +9,7 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import './LeavingArrivingBloomers.css';
 import { Timeline } from 'primereact/timeline';
-import { Calendar } from 'primereact/calendar';
+import { Calendar, CalendarChangeEvent } from 'primereact/calendar';
 import { EventTimeLine, Missions, Status } from '../../types.ts';
 import { filterDates, sortKeys, transformData } from '../../utils.ts';
 import { Skeleton } from 'primereact/skeleton';
@@ -94,7 +94,7 @@ function LeavingArrivingBloomers() {
     <>
       <Calendar
         value={date}
-        onChange={(e) => setDate(e.value as Date)}
+        onChange={(e: CalendarChangeEvent) => setDate(e.value as Date)}
         dateFormat="dd/mm/yy"
         disabled
       />
@@ -107,7 +107,8 @@ function LeavingArrivingBloomers() {
       />
       <Dialog visible={visible} onHide={() => setVisible(false)}>
         <h1 className="font-medium">
-          <u className="text-green-700">2</u> Bloomers entrants
+          <u className="text-green-700">{Object.keys(arriving).length}</u>{' '}
+          Bloomers entrants
         </h1>
         {loading ? (
           <>
@@ -137,7 +138,14 @@ function LeavingArrivingBloomers() {
           />
         )}
         <h1 className="font-medium">
-          <u className="text-red-400">2</u> Bloomers sortants
+          {loading ? (
+            <Skeleton></Skeleton>
+          ) : (
+            <>
+              <u className="text-red-400">{Object.keys(leaving).length}</u>{' '}
+              Bloomers sortants
+            </>
+          )}
         </h1>
         {loading ? (
           <>
